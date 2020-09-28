@@ -1,18 +1,147 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Clubs</th>
+          <th scope="col">MP</th>
+          <th scope="col">W</th>
+          <th scope="col">D</th>
+          <th scope="col">L</th>
+          <th scope="col">GF</th>
+          <th scope="col">GA</th>
+          <th scope="col">GD</th>
+          <th scope="col">Points</th>
+          <th scope="col">Last 5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :class="data.background ? data.background : 'bg-light'">
+          <td scope="col">{{data.name}}</td>
+          <td scope="col">{{data.mp}}</td>
+          <td scope="col">{{data.win}}</td>
+          <td scope="col">{{data.draw}}</td>
+          <td scope="col">{{data.lose}}</td>
+          <td scope="col">{{data.goalCon}}</td>
+          <td scope="col">{{data.goals}}</td>
+          <td scope="col">{{data.GoalDifference}}</td>
+          <td scope="col">{{data.points}}</td>
+          <td scope="col">
+            <span v-for="(pts, ind) in data.results" :key="ind">
+              {{pts}}
+            </span>
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>  
+</div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+
+// import Vue from 'vue';
+import axios from "axios";
 
 export default {
   name: "Home",
   components: {
-    HelloWorld
+  },
+  data() {
+    return {
+      // seasons: ['2014-15','2015-16', '2016-17','2018-19', '2019-20'],
+      league_data: [],
+      processPremierLeagueJSON: [],
+      title: '',
+      table_data: ''
+    }
+  },
+  mounted() {
+    this.getleagueData ()
+  },
+  methods:{
+ 
+    getleagueData(){
+      // this.seasons.map(season => {
+        // axios.get(`https://raw.githubusercontent.com/openfootball/football.json/master/${season}/en.1.json`)
+        axios.get (`https://raw.githubusercontent.com/openfootball/football.json/master/2014-15/en.1.json`)
+       .then (res => {
+         console.log("res", res);
+          this.league_data = res.data;
+          this.processPremierLeagueJSON  = this.processPremereLeague()
+          console.log (this.processPremierLeagueJSON);
+
+       })
+
+      // })
+    },
+    processPremereLeague() {
+      // const processPremierLeagueJSON = () => {
+        // console.log(data)
+      this.title = this.league_data.name;
+      var rounds = this.league_data.rounds;
+      var teamJSON = {};
+      for (var i in rounds) {
+        var matches = rounds[i].matches;
+        for (var j in matches) {
+          if (!teamJSON[matches[j]["team1"]]) {
+            teamJSON[matches[j]["team1"]] = {"name":matches[j]["team1"],"mp":0,"win":0,"lose":0,"draw":0,"goals":0,"goalCon":0,"points":0,results:[]};
+          };
+          
+          if (!teamJSON[matches[j]["team2"]]) {
+            teamJSON[matches[j]["team2"]] = {"name":matches[j]["team2"],"mp":0,"win":0,"lose":0,"draw":0,"goals":0,"goalCon":0,"points":0,results:[]};
+          };
+
+          var match = matches[j];
+          var score = match.score.ft;
+          teamJSON[matches[j]["team1"]].mp += 1;
+          teamJSON[matches[j]["team2"]].mp += 1;
+          teamJSON[matches[j]["team1"]].goals += score[0];
+          teamJSON[matches[j]["team1"]].goalCon += score[1];
+          teamJSON[matches[j]["team2"]].goals += score[1];
+          teamJSON[matches[j]["team2"]].goalCon += score[0];
+          if (score[0] > score[1]) {
+            teamJSON[matches[j]["team1"]].win += 1;
+            teamJSON[matches[j]["team1"]].points += 3;
+            teamJSON[matches[j]["team1"]].results.push("W ");
+            teamJSON[matches[j]["team2"]].results.push("L ");
+            teamJSON[matches[j]["team2"]].lose += 1;
+          } else if (score[1] > score[0]) {
+            teamJSON[matches[j]["team2"]].win += 1;
+            teamJSON[matches[j]["team2"]].points += 3;
+            teamJSON[matches[j]["team1"]].results.push("L ");
+            teamJSON[matches[j]["team2"]].results.push("W ");
+            teamJSON[matches[j]["team1"]].lose += 1;
+          } else {
+            teamJSON[matches[j]["team2"]].points += 1;
+            teamJSON[matches[j]["team1"]].points += 1;
+            teamJSON[matches[j]["team1"]].draw += 1;
+            teamJSON[matches[j]["team2"]].draw += 1;
+            teamJSON[matches[j]["team1"]].results.push("D ");
+            teamJSON[matches[j]["team2"]].results.push("D ");
+          }
+        }
+      }
+      var keys = Object.keys(teamJSON);
+      var resultArray = [];
+      for (var k in keys) {
+        var obj = teamJSON[keys[k]];
+        obj.GoalDifference = obj.goals - obj.goalCon;
+        obj.results.splice(0, 33);
+        resultArray.push(teamJSON[keys[k]]);
+      }
+
+      resultArray.sort((a,b) => (a.points < b.points) ? 1 : ((b.points < a.points) ? -1 : (a.goals < b.goals)? 1:0));
+      resultArray[0].background = 'bg-success';
+      resultArray[1].background = 'bg-success';
+      resultArray[2].background = 'bg-success'
+      resultArray[3].background = 'bg-success';
+      resultArray[17].background = 'bg-danger' ;
+      resultArray[18].background = 'bg-danger' ;
+      resultArray[19].background = "bg-danger" ;
+      return resultArray;
+    }
+    // }
   }
 };
 </script>
