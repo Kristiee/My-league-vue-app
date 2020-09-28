@@ -1,40 +1,59 @@
 <template>
   <div class="home">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Clubs</th>
-          <th scope="col">MP</th>
-          <th scope="col">W</th>
-          <th scope="col">D</th>
-          <th scope="col">L</th>
-          <th scope="col">GF</th>
-          <th scope="col">GA</th>
-          <th scope="col">GD</th>
-          <th scope="col">Points</th>
-          <th scope="col">Last 5</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :class="data.background ? data.background : 'bg-light'">
-          <td scope="col">{{data.name}}</td>
-          <td scope="col">{{data.mp}}</td>
-          <td scope="col">{{data.win}}</td>
-          <td scope="col">{{data.draw}}</td>
-          <td scope="col">{{data.lose}}</td>
-          <td scope="col">{{data.goalCon}}</td>
-          <td scope="col">{{data.goals}}</td>
-          <td scope="col">{{data.GoalDifference}}</td>
-          <td scope="col">{{data.points}}</td>
-          <td scope="col">
-            <span v-for="(pts, ind) in data.results" :key="ind">
-              {{pts}}
-            </span>
-          </td>
-        </tr>
-        
-      </tbody>
-    </table>  
+    <div class="row vertical-align-middle py-4">
+      <div class="col-md-6 ">
+        <h4> {{title}}</h4>
+      </div>
+      <div class="col-md-6" style="text-align: right!important;">
+        Season: 
+        <select class="c-text-grey-main border-none w-50 bg-transparent" style="border-color: transparent;" @change="selectSeason($event)">
+          <option class="c-text-grey-main" value="2019-20">2019-20</option>
+          <option value="2018-19" >2018-19</option>
+          <option value="2017-18" >2017-18</option>
+          <option value="2016-17" >2016-17</option>
+          <option value="2015-16" >2015-16</option>
+          <option value="2014-15" >2014-15</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Clubs</th>
+            <th scope="col">MP</th>
+            <th scope="col">W</th>
+            <th scope="col">D</th>
+            <th scope="col">L</th>
+            <th scope="col">GF</th>
+            <th scope="col">GA</th>
+            <th scope="col">GD</th>
+            <th scope="col">Points</th>
+            <th scope="col">Last 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :class="data.background ? data.background : 'bg-light'">
+            <td scope="col" @click="popup_club_details(data)">{{data.name}}</td>
+            <td scope="col">{{data.mp}}</td>
+            <td scope="col">{{data.win}}</td>
+            <td scope="col">{{data.draw}}</td>
+            <td scope="col">{{data.lose}}</td>
+            <td scope="col">{{data.goalCon}}</td>
+            <td scope="col">{{data.goals}}</td>
+            <td scope="col">{{data.GoalDifference}}</td>
+            <td scope="col">{{data.points}}</td>
+            <td scope="col">
+              <span v-for="(pts, ind) in data.results" :key="ind" class="border mr-1 pl-1">
+                {{pts }}
+              </span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>  
+    </div>
+    <ShowClub v-if="show_club_details" :club="club" :season="season"  @closeModal="closeModal"></ShowClub>
 </div>
 </template>
 
@@ -42,10 +61,11 @@
 
 // import Vue from 'vue';
 import axios from "axios";
-
+import ShowClub from './ShowClub'
 export default {
   name: "Home",
   components: {
+    ShowClub,
   },
   data() {
     return {
@@ -53,31 +73,35 @@ export default {
       league_data: [],
       processPremierLeagueJSON: [],
       title: '',
-      table_data: ''
+      table_data: '',
+      show_club_details: false,
+      club: '',
+      season: '2014-15'
     }
   },
   mounted() {
     this.getleagueData ()
   },
   methods:{
- 
+    selectSeason(e){
+      this.season = e.target.value
+      this.getleagueData()
+    },
+    popup_club_details(data){
+      this.club = data
+      this.show_club_details = true
+    },
+    closeModal(){
+      this.show_club_details = false
+    },
     getleagueData(){
-      // this.seasons.map(season => {
-        // axios.get(`https://raw.githubusercontent.com/openfootball/football.json/master/${season}/en.1.json`)
-        axios.get (`https://raw.githubusercontent.com/openfootball/football.json/master/2014-15/en.1.json`)
+        axios.get (`https://raw.githubusercontent.com/openfootball/football.json/master/${this.season}/en.1.json`)
        .then (res => {
-         console.log("res", res);
           this.league_data = res.data;
           this.processPremierLeagueJSON  = this.processPremereLeague()
-          console.log (this.processPremierLeagueJSON);
-
        })
-
-      // })
     },
     processPremereLeague() {
-      // const processPremierLeagueJSON = () => {
-        // console.log(data)
       this.title = this.league_data.name;
       var rounds = this.league_data.rounds;
       var teamJSON = {};
@@ -141,7 +165,6 @@ export default {
       resultArray[19].background = "bg-danger" ;
       return resultArray;
     }
-    // }
   }
 };
 </script>
