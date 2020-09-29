@@ -33,19 +33,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :class="data.background ? data.background : 'bg-light'">
+          <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :style="{'background-color': data.background ? data.background : '#eaefef'}" >
             <td scope="col" @click="popup_club_details(data)">{{data.name}}</td>
-            <td scope="col">{{data.mp}}</td>
-            <td scope="col">{{data.win}}</td>
-            <td scope="col">{{data.draw}}</td>
-            <td scope="col">{{data.lose}}</td>
-            <td scope="col">{{data.goalCon}}</td>
-            <td scope="col">{{data.goals}}</td>
-            <td scope="col">{{data.GoalDifference}}</td>
-            <td scope="col">{{data.points}}</td>
+            <td scope="col" >{{data.mp}}</td>
+            <td scope="col" >{{data.win}}</td>
+            <td scope="col" >{{data.draw}}</td>
+            <td scope="col" >{{data.lose}}</td>
+            <td scope="col" >{{data.goalCon}}</td>
+            <td scope="col" >{{data.goals}}</td>
+            <td scope="col" >{{data.GoalDifference}}</td>
+            <td scope="col" >{{data.points}}</td>
             <td scope="col">
-              <span v-for="(pts, ind) in data.results" :key="ind" class="border mr-1 pl-1">
-                {{pts }}
+              <span v-for="(pts, ind) in data.results" :key="ind" class="mr-1 pl-1">
+                <i :class="(pts== 'W ') ? 'fas fa-check-circle' :  (pts== 'L ') ? 'fa fa-times-circle' : 'fal fa-minus-circle'" 
+                               :style="{'color': (pts== 'W ') ? 'green' :  (pts== 'L ') ? 'red' : 'dimgrey'}"></i>
               </span>
             </td>
           </tr>
@@ -62,6 +63,10 @@
 // import Vue from 'vue';
 import axios from "axios";
 import ShowClub from './ShowClub'
+// import Tweet from 'vue-tweet-embed/tweet'
+// import Moment from 'vue-tweet-embed/moment'
+// import Timeline from 'vue-tweet-embed/timeline'
+
 export default {
   name: "Home",
   components: {
@@ -136,13 +141,13 @@ export default {
             teamJSON[matches[j]["team1"]].results.push("L ");
             teamJSON[matches[j]["team2"]].results.push("W ");
             teamJSON[matches[j]["team1"]].lose += 1;
-          } else {
-            teamJSON[matches[j]["team2"]].points += 1;
-            teamJSON[matches[j]["team1"]].points += 1;
-            teamJSON[matches[j]["team1"]].draw += 1;
-            teamJSON[matches[j]["team2"]].draw += 1;
-            teamJSON[matches[j]["team1"]].results.push("D ");
-            teamJSON[matches[j]["team2"]].results.push("D ");
+          }else{
+            teamJSON[matches[j]['team2']].points +=1;
+            teamJSON[matches[j]['team1']].points +=1;
+            teamJSON[matches[j]['team1']].draw +=1;
+            teamJSON[matches[j]['team2']].draw +=1;
+            teamJSON[matches[j]['team1']].results.push("D ");
+            teamJSON[matches[j]['team2']].results.push("D ");
           }
         }
       }
@@ -156,13 +161,13 @@ export default {
       }
 
       resultArray.sort((a,b) => (a.points < b.points) ? 1 : ((b.points < a.points) ? -1 : (a.goals < b.goals)? 1:0));
-      resultArray[0].background = 'bg-success';
-      resultArray[1].background = 'bg-success';
-      resultArray[2].background = 'bg-success'
-      resultArray[3].background = 'bg-success';
-      resultArray[17].background = 'bg-danger' ;
-      resultArray[18].background = 'bg-danger' ;
-      resultArray[19].background = "bg-danger" ;
+      resultArray[0].background = '#ccf8c4';
+      resultArray[1].background = '#ccf8c4';
+      resultArray[2].background = '#ccf8c4'
+      resultArray[3].background = '#ccf8c4';
+      resultArray[17].background = '#e9d6d1' ;
+      resultArray[18].background = '#e9d6d1' ;
+      resultArray[19].background = "#e9d6d1" ;
       return resultArray;
     }
   }
