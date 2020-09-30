@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <div class="row vertical-align-middle py-4">
-      <div class="col-md-6 ">
+      <div class="col-md-4 ">
         <h4> {{title}}</h4>
       </div>
-      <div class="col-md-6" style="text-align: right!important;">
+      <div class="col-md-4" style="text-align: center!important;">
         Season: 
-        <select class="c-text-grey-main border-none w-50 bg-transparent" style="border-color: transparent;" @change="selectSeason($event)">
+        <select class="c-text-grey-main border-none bg-transparent" style="border-color: transparent;" @change="selectSeason($event)">
           <option class="c-text-grey-main" value="2019-20">2019-20</option>
           <option value="2018-19" >2018-19</option>
           <option value="2017-18" >2017-18</option>
@@ -15,10 +15,14 @@
           <option value="2014-15" >2014-15</option>
         </select>
       </div>
+      <div class="col-md-4" style="text-align: right!important;">
+        <input class="form-control" id="myInput" type="text" placeholder="Search.." v-model="search" @keyup="search_club">
+
+      </div>
     </div>
     <div class="row">
       <table class="table">
-        <thead>
+        <thead class="bg-grey-main">
           <tr>
             <th scope="col">Clubs</th>
             <th scope="col">MP</th>
@@ -32,8 +36,8 @@
             <th scope="col">Last 5</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :style="{'background-color': data.background ? data.background : '#eaefef'}" >
+        <tbody  id="myTable">
+          <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :style="{'background-color': data.background ? data.background : 'ghostwhite'}" >
             <td scope="col" ><a href="#" class="text-dark"> <span  data-toggle="modal" data-target="#myModal" @click="popup_club_details(data)">{{data.name}}</span></a></td>
             <td scope="col" >{{data.mp}}</td>
             <td scope="col" >{{data.win}}</td>
@@ -86,13 +90,21 @@ export default {
       table_data: '',
       show_club_details: false,
       club: '',
-      season: '2014-15'
+      season: '2014-15',
+      search: ''
     }
   },
   mounted() {
     this.getleagueData ()
+
   },
   methods:{
+    search_club(){
+      // var value = $(this).val().toLowerCase();
+      // $("#myTable tr").filter(function() {
+      //   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      // });
+    },
     selectSeason(e){
       this.season = e.target.value
       this.getleagueData()
@@ -167,15 +179,23 @@ export default {
       }
 
       resultArray.sort((a,b) => (a.points < b.points) ? 1 : ((b.points < a.points) ? -1 : (a.goals < b.goals)? 1:0));
-      resultArray[0].background = '#ccf8c4';
-      resultArray[1].background = '#ccf8c4';
-      resultArray[2].background = '#ccf8c4'
-      resultArray[3].background = '#ccf8c4';
-      resultArray[17].background = '#e9d6d1' ;
-      resultArray[18].background = '#e9d6d1' ;
-      resultArray[19].background = "#e9d6d1" ;
+      resultArray[0].background = 'honeydew' ;
+      resultArray[1].background = 'honeydew' ;
+      resultArray[2].background = 'honeydew' ;
+      resultArray[3].background = 'honeydew' ;
+      resultArray[17].background = 'lightpink' ;
+      resultArray[18].background = 'lightpink' ;
+      resultArray[19].background = "lightpink" ;
       return resultArray;
     }
   }
 };
 </script>
+<style scoped>
+table thead tr th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+    background: darkgray;
+    font-size: 12px!important;
+}
+</style>

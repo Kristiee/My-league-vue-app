@@ -1,12 +1,15 @@
 <template>
   <div id="app" class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand w-25" href="#">
-        <img src="https://d1v4btv2rwszby.cloudfront.net/public/images/PL-Right-image.png" class="w-25"/>
-      </a>
-
-
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-0">
+      <div class="w-25 navbar-collapse ">
+        <span>
+      <a class="navbar-brand mr-0" href="#">
+        <img src="https://d1v4btv2rwszby.cloudfront.net/public/images/PL-Right-image.png" class="h-100"/> 
+      </a></span>
+      <span class="menu_text">Premiere League</span>
+      </div>
+      
+      <div class="collapse navbar-collapse menu_text ml-4 " id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item active ">
             <router-link to="/" class="nav-link px-3">Standings</router-link> 
@@ -32,6 +35,25 @@
 </template>
 
 <style lang="scss">
+  .box-container {
+    display: flex;
+    flex_direction: row;
+  }
+  .logo-1 {
+    background-color: dodgerblue;
+    width: 50%;
+    height: 50%;
+  }
+
+  .logo-2 {
+    background-color: orangered;
+    width: 50%;
+    height: 50%;
+  }
+  .menu_text {
+    font-size: 16px!important;
+    color: lightgrey!important;
+  }
 // #app {
 //   font-family: Avenir, Helvetica, Arial, sans-serif;
 //   -webkit-font-smoothing: antialiased;
