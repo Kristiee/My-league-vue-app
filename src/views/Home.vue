@@ -24,15 +24,15 @@
       <table class="table">
         <thead class="bg-grey-main">
           <tr>
-            <th scope="col">Clubs</th>
+            <th scope="col" @click="sortByName = !sortByName">Clubs&nbsp;<i class=" fas fa-sort"></i></th>
             <th scope="col">MP</th>
-            <th scope="col">W</th>
+            <th scope="col" @click="sortByWins = !sortByWins">W&nbsp;<i class="fas fa-sort"></i></th>
             <th scope="col">D</th>
             <th scope="col">L</th>
             <th scope="col">GF</th>
             <th scope="col">GA</th>
             <th scope="col">GD</th>
-            <th scope="col">Points</th>
+            <th scope="col" @click="sortByPoints = !sortByPoints">Points&nbsp;<i class="fas fa-sort"></i></th>
             <th scope="col">Last 5</th>
           </tr>
         </thead>
@@ -91,14 +91,61 @@ export default {
       show_club_details: false,
       club: '',
       season: '2014-15',
-      search: ''
+      search: '',
+      sortData: [],
+      sortByName: false,
+      sortByWins: false,
+      sortByPoints: false
     }
   },
   mounted() {
     this.getleagueData ()
 
   },
+  
+  watch: {
+    sortByName: function (val) {
+			var self = this;
+			self.processPremierLeagueJSON = self.sortBy(self.processPremierLeagueJSON, 'name', val);
+		},
+		sortByWins: function (val) {
+			var self = this;
+			self.processPremierLeagueJSON = self.sortBy(self.processPremierLeagueJSON, 'wins', val);
+		},
+		sortByPoints: function (val) {
+			var self = this;
+			self.processPremierLeagueJSON = self.sortBy(self.processPremierLeagueJSON, 'points', val);
+		},
+  },
   methods:{
+    sortBy: function(array, param, reverse) {
+			var filterA, filterB;
+			return array.sort(function (a, b) {
+				switch (param) {
+					case 'id':
+						filterA = a.id;
+						filterB = b.id;
+						break;
+					case 'name':
+						filterA = a.name;
+						filterB = b.name;
+						break;
+					case 'old':
+						filterA = a.old;
+						filterB = b.old;
+						break;
+					case 'status':
+						filterA = a.status;
+						filterB = b.status;
+						break;
+				}
+				if (reverse) {
+					return (filterA > filterB) ? 1 : -1;
+				} else {
+					return (filterA < filterB) ? 1 : -1;
+				}
+			});
+		},
     search_club(){
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("clubSearch");
@@ -128,7 +175,6 @@ export default {
       this.show_club_details = true
     },
     closeModal(){
-      debugger
       this.show_club_details = false
     },
     getleagueData(){
