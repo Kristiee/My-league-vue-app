@@ -16,7 +16,7 @@
         </select>
       </div>
       <div class="col-md-4" style="text-align: right!important;">
-        <input class="form-control" id="myInput" type="text" placeholder="Search.." v-model="search" @keyup="search_club">
+        <input class="form-control" id="clubSearch" type="text" placeholder="Search.." v-model="search" @keyup="search_club">
 
       </div>
     </div>
@@ -36,7 +36,7 @@
             <th scope="col">Last 5</th>
           </tr>
         </thead>
-        <tbody  id="myTable">
+        <tbody  id="leagueDataTable">
           <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :style="{'background-color': data.background ? data.background : 'ghostwhite'}" >
             <td scope="col" ><a href="#" class="text-dark"> <span  data-toggle="modal" data-target="#myModal" @click="popup_club_details(data)">{{data.name}}</span></a></td>
             <td scope="col" >{{data.mp}}</td>
@@ -100,10 +100,24 @@ export default {
   },
   methods:{
     search_club(){
-      // var value = $(this).val().toLowerCase();
-      // $("#myTable tr").filter(function() {
-      //   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      // });
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("clubSearch");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("leagueDataTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+  }
+      
+            
     },
     selectSeason(e){
       this.season = e.target.value
