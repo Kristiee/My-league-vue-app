@@ -34,7 +34,7 @@
         </thead>
         <tbody>
           <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :style="{'background-color': data.background ? data.background : '#eaefef'}" >
-            <td scope="col" @click="popup_club_details(data)">{{data.name}}</td>
+            <td scope="col" ><a href="#" class="text-dark"> <span  data-toggle="modal" data-target="#myModal" @click="popup_club_details(data)">{{data.name}}</span></a></td>
             <td scope="col" >{{data.mp}}</td>
             <td scope="col" >{{data.win}}</td>
             <td scope="col" >{{data.draw}}</td>
@@ -45,7 +45,7 @@
             <td scope="col" >{{data.points}}</td>
             <td scope="col">
               <span v-for="(pts, ind) in data.results" :key="ind" class="mr-1 pl-1">
-                <i :class="(pts== 'W ') ? 'fas fa-check-circle' :  (pts== 'L ') ? 'fa fa-times-circle' : 'fal fa-minus-circle'" 
+                <i :class="(pts== 'W ') ? 'fas fa-check-circle' :  (pts== 'L ') ? 'fa fa-times-circle' : 'fas fa-minus-circle '" 
                                :style="{'color': (pts== 'W ') ? 'green' :  (pts== 'L ') ? 'red' : 'dimgrey'}"></i>
               </span>
             </td>
@@ -54,23 +54,29 @@
         </tbody>
       </table>  
     </div>
+    <div class="row w-50">
+      <!-- <a class="twitter-timeline" href="https://twitter.com/premierleague"> Tweets by @premeierLeague </a> -->
+      <Tweet :tweetid="'premierleague'"></Tweet>
+    </div>
     <ShowClub v-if="show_club_details" :club="club" :season="season"  @closeModal="closeModal"></ShowClub>
-</div>
+  </div>
 </template>
+<script src="https://platform.twitter.com/widgets.js" async></script>
 
 <script>
 
 // import Vue from 'vue';
 import axios from "axios";
 import ShowClub from './ShowClub'
+import Tweet from './Tweet'
 // import Tweet from 'vue-tweet-embed/tweet'
 // import Moment from 'vue-tweet-embed/moment'
-// import Timeline from 'vue-tweet-embed/timeline'
 
 export default {
   name: "Home",
   components: {
     ShowClub,
+    Tweet
   },
   data() {
     return {
@@ -97,6 +103,7 @@ export default {
       this.show_club_details = true
     },
     closeModal(){
+      debugger
       this.show_club_details = false
     },
     getleagueData(){

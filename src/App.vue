@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Premere League</a>
+      <a class="navbar-brand w-25" href="#">
+        <img src="https://d1v4btv2rwszby.cloudfront.net/public/images/PL-Right-image.png" class="w-25"/>
+      </a>
 
 
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">

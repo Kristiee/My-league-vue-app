@@ -1,44 +1,33 @@
 <template>
-  <div class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            {{ club.name }}
-          </h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            >
-
-            <span aria-hidden="true">
-              &times;
-            </span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <span class="float-left"> Code: {{ club_details.code }}
-            </span>
-            <span class="float-right"> 
-              country: {{ club_details.country }}
-            </span>
+  <div class="container">
+    <div class="modal show" style="display: block" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title">{{ club.name }}</h1>
+            <button type="button" class="close" @click="closeModal">×</button>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">
-            Save changes
-          </button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
+          <div class="modal-body">
+            <h5 > Code: {{ club_details.code }}</h5>
+            <h5 > Country: {{ club_details.country }}</h5>
+
+            <a class="twitter-moment" :href="`https://twitter.com/${clubid}`"> Tweets by @{{clubid}} </a>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" @click="closeModal">Close</button>
+          </div>
+          
         </div>
       </div>
     </div>
+    
   </div>
+
+
+ 
 </template>
+<script src="https://platform.twitter.com/widgets.js" async></script>
 
 <script>
 import axios from "axios";
@@ -46,16 +35,25 @@ import axios from "axios";
 export default {
   name: "Club",
   props: ["club", "season"],
+
   data() {
     return {
       club_details: {}
     }
   },
+  computed: {
+    clubid: function(){
+      return this.club.name.replace(/\s+/g,'')
+    }
+  },
   mounted(){
-    debugger
+
     this.getClub()
   },
   methods: {
+    closeModal(){
+      this.$emit('closeModal')
+    },
     getClub() {
       var club_name = this.club.name;
       axios
@@ -72,3 +70,56 @@ export default {
   }
 };
 </script>
+<style>
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 28, 63, 0.7);    /* To change the opacity background*/
+    display: table;
+    transition: opacity .3s ease;
+  }
+
+  .modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .modal-container {
+    width: 500px;
+    height: calc((100vh) - 100px);
+    margin: 0px auto;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    transition: all .3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+    overflow-y: scroll;
+  }
+  .modal-header{
+    display: block!important;
+  }
+  .modal-header h3 {
+    margin-top: 0;
+    color: #42b983;
+  }
+
+  .modal-enter {
+    opacity: 0;
+  }
+
+  .modal-leave-active {
+    opacity: 0;
+  }
+
+  .modal-enter .modal-container,
+  .modal-leave-active .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  
+</style>
