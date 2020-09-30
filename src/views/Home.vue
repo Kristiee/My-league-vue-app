@@ -55,20 +55,19 @@
       </table>  
     </div>
     <div class="row w-50">
-      <!-- <a class="twitter-timeline" href="https://twitter.com/premierleague"> Tweets by @premeierLeague </a> -->
-      <Tweet :tweetid="'premierleague'"></Tweet>
+      <a class="twitter-timeline" href="https://twitter.com/premierleague"> Tweets by @premeierLeague </a>
+      <!-- <Tweet :tweetid="'premierleague'"></Tweet> -->
     </div>
     <ShowClub v-if="show_club_details" :club="club" :season="season"  @closeModal="closeModal"></ShowClub>
   </div>
 </template>
-<script src="https://platform.twitter.com/widgets.js" async></script>
 
 <script>
 
 // import Vue from 'vue';
 import axios from "axios";
 import ShowClub from './ShowClub'
-import Tweet from './Tweet'
+// import Tweet from './Tweet'
 // import Tweet from 'vue-tweet-embed/tweet'
 // import Moment from 'vue-tweet-embed/moment'
 
@@ -76,7 +75,7 @@ export default {
   name: "Home",
   components: {
     ShowClub,
-    Tweet
+    // Tweet
   },
   data() {
     return {

@@ -1,18 +1,21 @@
 <template>
   <div class="container">
     <div class="modal show" style="display: block" id="myModal">
-      <div class="modal-dialog">
+<a class="twitter-timeline" href="https://twitter.com/premierleague?ref_src=twsrc%5Etfw">Tweets by premierleague</a>
+
+      <div class="modal-dialog"    style="height: 600px!important;  width: 1200px!important; overflow-y:scroll;">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title">{{ club.name }}</h1>
             <button type="button" class="close" @click="closeModal">×</button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="height: 500px!important;  width: 1200px!important;">
             <h5 > Code: {{ club_details.code }}</h5>
             <h5 > Country: {{ club_details.country }}</h5>
 
-            <a class="twitter-moment" :href="`https://twitter.com/${clubid}`"> Tweets by @{{clubid}} </a>
-
+            <blockquote class="twitter-tweet">
+              <a class="twitter-timeline" href="https://twitter.com/premierleague?ref_src=twsrc%5Etfw">Tweets by premierleague</a>
+            </blockquote> 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" @click="closeModal">Close</button>
@@ -89,8 +92,8 @@ export default {
   }
 
   .modal-container {
-    width: 500px;
-    height: calc((100vh) - 100px);
+    width:  1000px!important;
+    height: 800px!important; 
     margin: 0px auto;
     padding: 20px 30px;
     background-color: #fff;
