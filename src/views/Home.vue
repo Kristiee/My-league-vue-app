@@ -4,16 +4,9 @@
       <div class="col-md-4 ">
         <h4> {{title}}</h4>
       </div>
-      <div class="col-md-4" style="text-align: center!important;">
+      <div class="col-md-4" style="text-align: center!important; font-size: medium; ">
         Season: 
-        <select class="c-text-grey-main border-none bg-transparent" style="border-color: transparent;" @change="selectSeason($event)">
-          <option class="c-text-grey-main" value="2019-20">2019-20</option>
-          <option value="2018-19" >2018-19</option>
-          <option value="2017-18" >2017-18</option>
-          <option value="2016-17" >2016-17</option>
-          <option value="2015-16" >2015-16</option>
-          <option value="2014-15" >2014-15</option>
-        </select>
+        <Season @selectSeason="selectSeason"></Season>
       </div>
       <div class="col-md-4" style="text-align: right!important;">
         <input class="form-control" id="clubSearch" type="text" placeholder="Search.." v-model="search" @keyup="search_club">
@@ -38,7 +31,9 @@
         </thead>
         <tbody  id="leagueDataTable">
           <tr v-for="(data, key) in processPremierLeagueJSON" :key="key" :style="{'background-color': data.background ? data.background : 'ghostwhite'}" >
-            <td scope="col" ><a href="#" class="text-dark"> <span  data-toggle="modal" data-target="#myModal" @click="popup_club_details(data)">{{data.name}}</span></a></td>
+            <td scope="col" ><a href="#" class="text-dark"> <span  data-toggle="modal" data-target="#myModal">
+              <router-link :to="`/club/${data.name}`" class="td-link px-3">{{data.name}}</router-link> 
+              </span></a></td>
             <td scope="col" >{{data.mp}}</td>
             <td scope="col" >{{data.win}}</td>
             <td scope="col" >{{data.draw}}</td>
@@ -59,31 +54,26 @@
       </table>  
     </div>
     <div class="row w-50">
-      <a class="twitter-timeline" href="https://twitter.com/premierleague"> Tweets by @premeierLeague </a>
-      <!-- <Tweet :tweetid="'premierleague'"></Tweet> -->
+      <Tweet :tweetid="'premierleague'"></Tweet>
     </div>
-    <ShowClub v-if="show_club_details" :club="club" :season="season"  @closeModal="closeModal"></ShowClub>
   </div>
 </template>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <script>
 
-// import Vue from 'vue';
 import axios from "axios";
-import ShowClub from './ShowClub'
-// import Tweet from './Tweet'
-// import Tweet from 'vue-tweet-embed/tweet'
-// import Moment from 'vue-tweet-embed/moment'
+import Tweet from './Tweet'
+import Season from './Seasons'
 
 export default {
   name: "Home",
   components: {
-    ShowClub,
-    // Tweet
+    Tweet,
+    Season
   },
   data() {
     return {
-      // seasons: ['2014-15','2015-16', '2016-17','2018-19', '2019-20'],
       league_data: [],
       processPremierLeagueJSON: [],
       title: '',
@@ -162,15 +152,16 @@ export default {
             tr[i].style.display = "none";
           }
         }       
-  }
+      }
       
             
     },
     selectSeason(e){
-      this.season = e.target.value
+      this.season = e
       this.getleagueData()
     },
     popup_club_details(data){
+    
       this.club = data
       this.show_club_details = true
     },
@@ -257,5 +248,10 @@ table thead tr th {
     border-bottom: 2px solid #ddd;
     background: darkgray;
     font-size: 12px!important;
+}
+.td-link {
+  display: block;
+  padding: .5rem 1rem;
+  color: black;
 }
 </style>

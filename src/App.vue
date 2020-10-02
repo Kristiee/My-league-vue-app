@@ -15,19 +15,19 @@
             <router-link to="/" class="nav-link px-3">Standings</router-link> 
           </li>
           <li class="nav-item">
-            <router-link to="/matches" class="nav-link px-3">Matches</router-link> 
+            <router-link to="/match" class="nav-link  px-3">Matches</router-link> 
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/teams" class="nav-link px-3"> Teams</router-link> 
           </li>
           <li class="nav-item">
             <router-link to="/players" class="nav-link px-3"> Playes</router-link> 
-          </li>
+          </li> -->
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <!-- <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" placeholder="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        </form> -->
       </div>
     </nav>
     <router-view />

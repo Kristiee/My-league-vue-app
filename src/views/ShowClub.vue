@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="modal show" style="display: block" id="myModal">
-<a class="twitter-timeline" href="https://twitter.com/premierleague?ref_src=twsrc%5Etfw">Tweets by premierleague</a>
+      <a class="twitter-timeline" href="https://twitter.com/premierleague?ref_src=twsrc%5Etfw">Tweets by premierleague</a>
 
       <div class="modal-dialog"    style="height: 600px!important;  width: 1200px!important; overflow-y:scroll;">
         <div class="modal-content">
